@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, ScrollView, StyleSheet } from 'react-native'
-import { DrawerItems, SafeAreaView } from 'react-navigation'
+import { SafeAreaView } from 'react-navigation'
 
 export default class CustomDrawer extends React.Component {
 

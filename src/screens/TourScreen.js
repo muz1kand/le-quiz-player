@@ -1,5 +1,5 @@
 import React from 'react'
-import { AsyncStorage, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { AsyncStorage, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 import TopBar from '../components/TopBar'
 
 export default class TourScreen extends React.Component {
@@ -20,6 +20,7 @@ export default class TourScreen extends React.Component {
   }
 
   handleBuzz = () => {
+    Vibration.vibrate(100)
     console.log('Buzz')
   }
 
