@@ -1,6 +1,9 @@
 import React from 'react'
 import { AsyncStorage, Button, StyleSheet, TextInput, View } from 'react-native'
 
+import firebase from '../firebase'
+import auth from '../auth'
+
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'Не тупи!',
@@ -9,15 +12,18 @@ export default class LoginScreen extends React.Component {
   constructor() {
     super()
     this.state = {
-      userName: '',
+      playerName: '',
     }
   }
 
   handleEnter = async () => {
-    const { userName } = this.state
-    if (userName) {
-      await AsyncStorage.setItem('userName', userName)
-      this.props.navigation.navigate('App')
+    const { playerName } = this.state
+    const playerKey = firebase.database().ref().child('players').push({
+      name: playerName,
+    }).key
+    if (playerName) {
+      await AsyncStorage.setItem('playerKey', playerKey)
+      auth(playerKey, this.props.navigation)
     }
   }
 
@@ -27,8 +33,8 @@ export default class LoginScreen extends React.Component {
         <TextInput
           style={styles.input}
           placeholder="Название команды"
-          value={this.state.userName}
-          onChangeText={(userName) => this.setState({ userName })}
+          value={this.state.playerName}
+          onChangeText={(playerName) => this.setState({ playerName })}
           onSubmitEditing={this.handleEnter}
         />
         <Button

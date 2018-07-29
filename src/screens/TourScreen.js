@@ -1,6 +1,7 @@
 import React from 'react'
 import { AsyncStorage, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
 import TopBar from '../components/TopBar'
+import firebase from '../firebase'
 
 export default class TourScreen extends React.Component {
   static navigationOptions = {
@@ -10,29 +11,38 @@ export default class TourScreen extends React.Component {
   constructor() {
     super()
     this.state = {
-      userName: '',
+      activePlayKey: '',
+      playerName: '',
     }
   }
 
   componentDidMount = async () => {
-    const userName = await AsyncStorage.getItem('userName')
-    this.setState({ userName })
+    const playerKey = await AsyncStorage.getItem('playerKey')
+    const playerName = await AsyncStorage.getItem('playerName')
+    const activePlayKey = await AsyncStorage.getItem('activePlayKey')
+    this.setState({ activePlayKey, playerName, playerKey })
   }
 
   handleBuzz = () => {
+    const { activePlayKey, playerKey } = this.state
     Vibration.vibrate(100)
-    console.log('Buzz')
+    firebase.database().ref(`plays/${activePlayKey}`).update({
+      isPlaying: false,
+      player: playerKey,
+    })
   }
 
   render() {
     return (
       <View style={styles.container}>
         <TopBar/>
-        <Text style={styles.name}>{this.state.userName}</Text>
+        <Text style={styles.name}>{this.state.playerName}</Text>
         <View style={styles.main}>
-          <TouchableOpacity
-            onPress={this.handleBuzz}>
-            <View style={styles.button}/>
+          <TouchableOpacity>
+            <View
+              style={styles.button}
+              onTouchStart={this.handleBuzz}
+            />
           </TouchableOpacity>
         </View>
       </View>

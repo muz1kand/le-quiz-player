@@ -1,5 +1,6 @@
 import React from 'react'
 import { ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native'
+import auth from '../auth'
 
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -8,13 +9,8 @@ export default class AuthLoadingScreen extends React.Component {
   }
 
   _bootstrapAsync = async () => {
-    const userName = await AsyncStorage.getItem('userName')
-
-    // This will switch to the App screen or Auth screen and this loading
-    // screen will be unmounted and thrown away.
-    setTimeout(() => {
-      this.props.navigation.navigate(userName ? 'App' : 'Auth')
-    }, 1000)
+    const playerKey = await AsyncStorage.getItem('playerKey')
+    auth(playerKey, this.props.navigation)
   }
 
   render() {
