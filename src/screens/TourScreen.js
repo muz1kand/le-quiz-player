@@ -25,7 +25,6 @@ export default class TourScreen extends React.Component {
 
   handleBuzz = () => {
     const { activePlayKey, playerKey } = this.state
-    Vibration.vibrate(100)
     firebase.database().ref(`plays/${activePlayKey}`).update({
       isPlaying: false,
       player: playerKey,
