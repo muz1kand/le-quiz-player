@@ -1,41 +1,37 @@
 import React from 'react'
-import { AsyncStorage, StyleSheet, Text, TouchableOpacity, Vibration, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import TopBar from '../components/TopBar'
-import firebase from '../firebase'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { firebaseConnect } from 'react-redux-firebase'
+import { path } from 'ramda'
 
-export default class TourScreen extends React.Component {
+class TourScreen extends React.Component {
   static navigationOptions = {
     drawerLabel: 'Текущий тур',
   }
 
-  constructor() {
-    super()
-    this.state = {
-      activePlayKey: '',
-      playerName: '',
+  handleBuzz = async () => {
+    const { players, playerKey } = this.props
+    const activePlayKey = path([playerKey, 'activePlayKey'], players)
+    try {
+      await this.props.firebase.update(`plays/${activePlayKey}`, {
+        isPlaying: false,
+        player: playerKey,
+      })
+    } catch (e) {
+      console.log(e)
     }
   }
 
-  componentDidMount = async () => {
-    const playerKey = await AsyncStorage.getItem('playerKey')
-    const playerName = await AsyncStorage.getItem('playerName')
-    const activePlayKey = await AsyncStorage.getItem('activePlayKey')
-    this.setState({ activePlayKey, playerName, playerKey })
-  }
-
-  handleBuzz = () => {
-    const { activePlayKey, playerKey } = this.state
-    firebase.database().ref(`plays/${activePlayKey}`).update({
-      isPlaying: false,
-      player: playerKey,
-    })
-  }
-
   render() {
+    const { players, playerKey } = this.props
+    const name = path([playerKey, 'name'], players)
+    const activePlayKey = path([playerKey, 'activePlayKey'], players)
     return (
       <View style={styles.container}>
         <TopBar/>
-        <Text style={styles.name}>{this.state.playerName}</Text>
+        <Text style={styles.name}>{name}</Text>
         <View style={styles.main}>
           <TouchableOpacity>
             <View
@@ -67,8 +63,18 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#ffae27',
-    borderRadius: 100,
-    height: 200,
-    width: 200,
+    borderRadius: (Dimensions.get('window').width - 50) / 2,
+    height: Dimensions.get('window').width - 50,
+    width: Dimensions.get('window').width - 50,
   },
 })
+
+export default compose(
+  firebaseConnect((props) => [
+    { path: 'players' },
+  ]),
+  connect(({ auth, firebase }) => ({
+    players: firebase.data['players'],
+    playerKey: auth.playerKey,
+  })),
+)(TourScreen)

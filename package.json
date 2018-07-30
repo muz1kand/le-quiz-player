@@ -1,5 +1,5 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "main": "index.js",
   "private": true,
   "scripts": {
     "start": "expo start",
@@ -11,7 +11,10 @@
     "ramda": "^0.25.0",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-28.0.0.tar.gz",
-    "react-navigation": "^2.9.1"
+    "react-navigation": "^2.9.1",
+    "react-redux": "^5.0.7",
+    "react-redux-firebase": "^2.1.6",
+    "redux": "^4.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.6",

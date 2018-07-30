@@ -7,4 +7,7 @@ export default {
     messagingSenderId: '728110861753',
     enableRedirectHandling: false,
   },
+  firebasePaths: {
+    userProfile: '/users',
+  },
 }

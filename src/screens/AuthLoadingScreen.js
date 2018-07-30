@@ -1,8 +1,10 @@
 import React from 'react'
 import { ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native'
 import auth from '../auth'
+import { connect } from 'react-redux'
+import { login, load as loadAuth } from '../redux/modules/auth'
 
-export default class AuthLoadingScreen extends React.Component {
+class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props)
     this._bootstrapAsync()
@@ -10,6 +12,9 @@ export default class AuthLoadingScreen extends React.Component {
 
   _bootstrapAsync = async () => {
     const playerKey = await AsyncStorage.getItem('playerKey')
+    if (playerKey) {
+      this.props.login(playerKey)
+    }
     auth(playerKey, this.props.navigation)
   }
 
@@ -31,3 +36,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 })
+
+const mapStateToProps = state =>
+  ({
+    auth: state.auth,
+  })
+
+const mapDispatchToProps = dispatch =>
+  ({
+    loadAuth() {
+      dispatch(
+        loadAuth(),
+      )
+    },
+    login(playerKey) {
+      dispatch(
+        login(playerKey),
+      )
+    },
+  })
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen)
