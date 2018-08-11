@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: '#ffae27',
+    backgroundColor: '#EF7C4A',
     borderRadius: Dimensions.get('window').width,
     justifyContent: 'center',
     height: '100%',
   },
   button1: {
     alignItems: 'center',
-    backgroundColor: '#4954de',
+    backgroundColor: '#4999DB',
     borderRadius: Dimensions.get('window').width,
     justifyContent: 'center',
     height: '100%',

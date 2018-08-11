@@ -1,4 +1,5 @@
 import React from 'react'
+import { ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
@@ -18,8 +19,9 @@ class Tour extends React.Component {
       case tours.biathlon:
         return <TourBiathlon {...this.props}/>
       case tours.jeopardy:
-      default:
         return <TourJeopardy {...this.props}/>
+      default:
+        return <ActivityIndicator/>
     }
   }
 }
