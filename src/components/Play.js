@@ -35,11 +35,13 @@ const styles = StyleSheet.create({
   name: {
     color: '#000',
     fontSize: 30,
+    height: 40,
     textAlign: 'center',
   },
   score: {
     color: '#000',
     fontSize: 30,
+    height: 40,
     textAlign: 'center',
   },
   main: {
