@@ -1,10 +1,12 @@
 import React from 'react'
 import { AsyncStorage, Button, StyleSheet, TextInput, View } from 'react-native'
+import { compose } from 'redux'
+import { firebaseConnect } from 'react-redux-firebase'
+import auth from '../helpers/auth'
+import { connect } from 'react-redux'
+import { login } from '../redux/modules/auth'
 
-import firebase from '../firebase'
-import auth from '../auth'
-
-export default class LoginScreen extends React.Component {
+class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'Не тупи!',
   }
@@ -18,13 +20,20 @@ export default class LoginScreen extends React.Component {
 
   handleEnter = async () => {
     const { playerName } = this.state
-    const playerKey = firebase.database().ref().child('players').push({
-      name: playerName,
-    }).key
-    if (playerName) {
-      await AsyncStorage.setItem('playerKey', playerKey)
-      auth(playerKey, this.props.navigation)
+    if (!playerName) {
+      return
     }
+
+    const res = await this.props.firebase.push('players', {
+      name: playerName,
+    })
+
+    const playerKey = res.getKey()
+    this.props.login(playerKey)
+    await AsyncStorage.setItem('playerKey', playerKey)
+    setTimeout(() => {
+      auth(playerKey, this.props.navigation, this.props.firebase)
+    }, 1)
   }
 
   render() {
@@ -63,3 +72,17 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 })
+
+const mapDispatchToProps = dispatch =>
+  ({
+    login(playerKey) {
+      dispatch(
+        login(playerKey),
+      )
+    },
+  })
+
+export default compose(
+  firebaseConnect(),
+  connect(null, mapDispatchToProps),
+)(LoginScreen)

@@ -1,7 +1,9 @@
 import React from 'react'
 import { ActivityIndicator, AsyncStorage, StyleSheet, Text, View } from 'react-native'
-import auth from '../auth'
+import auth from '../helpers/auth'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { firebaseConnect } from 'react-redux-firebase'
 import { login, load as loadAuth } from '../redux/modules/auth'
 
 class AuthLoadingScreen extends React.Component {
@@ -15,7 +17,7 @@ class AuthLoadingScreen extends React.Component {
     if (playerKey) {
       this.props.login(playerKey)
     }
-    auth(playerKey, this.props.navigation)
+    auth(playerKey, this.props.navigation, this.props.firebase)
   }
 
   render() {
@@ -56,4 +58,7 @@ const mapDispatchToProps = dispatch =>
     },
   })
 
-export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen)
+export default compose(
+  firebaseConnect(),
+  connect(mapStateToProps, mapDispatchToProps)
+)(AuthLoadingScreen)

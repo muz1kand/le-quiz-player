@@ -1,10 +1,12 @@
 import React from 'react'
-import { AsyncStorage, Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { firebaseConnect } from 'react-redux-firebase'
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
 import TopBar from '../components/TopBar'
-import firebase from '../firebase'
 import { path } from 'ramda'
 
-export default class GameScreen extends React.Component {
+class GameScreen extends React.Component {
   static navigationOptions = {
     drawerLabel: 'Игра',
   }
@@ -12,52 +14,62 @@ export default class GameScreen extends React.Component {
   constructor() {
     super()
     this.state = {
-      playerName: '',
       pin: '',
+      pinError: false,
     }
   }
 
-  componentDidMount = async () => {
-    const playerName = await AsyncStorage.getItem('playerName')
-    this.setState({ playerName })
+  handleChangePin = (pin) => {
+    this.setState({ pin, pinError: false })
   }
 
   handleEnterPin = async () => {
+    const { playerKey } = this.props
     let { pin } = this.state
     if (!pin) {
       return
     }
-    const playerKey = await AsyncStorage.getItem('playerKey')
 
+    let playKey = ''
     const pinUppercase = pin.toUpperCase()
-    const snapshot = await firebase.database().ref('plays').orderByChild('pin').equalTo(pinUppercase).once('value')
-    snapshot.forEach((data) => {
-      const playKey = data.key
-      const isUserInPlay = path([playKey, 'players', playerKey], data)
+    const snapshot = await this.props.firebase.ref('plays').orderByChild('pin').equalTo(pinUppercase).once('value')
+    snapshot.forEach((play) => {
+      playKey = play.key
+      const isUserInPlay = path(['players', playerKey], play)
       if (!isUserInPlay) {
-        firebase.database().ref(`plays/${playKey}/players/${playerKey}`).update({
+        this.props.firebase.update(`${'plays'}/${playKey}/players/${playerKey}`, {
           score: 0,
         })
       }
-      firebase.database().ref(`players/${playerKey}`).update({
+      this.props.firebase.update(`${'players'}/${playerKey}`, {
         activePlayKey: playKey,
       })
       this.props.navigation.navigate('Tour')
     })
+
+    if (!playKey) {
+      this.setState({
+        pinError: true,
+      })
+    }
   }
 
   render() {
+    const { pinError } = this.state
+    const name = path(['name'], this.props.player)
     return (
       <View style={styles.container}>
         <TopBar/>
-        <Text style={styles.name}>{this.state.playerName}</Text>
+        <Text style={styles.name}>{name}</Text>
         <View style={styles.main}>
+          {pinError &&
+          <Text>Неправильный PIN</Text>}
           <TextInput
             autoCapitalize="none"
             style={styles.input}
             placeholder="PIN игры"
             value={this.state.pin}
-            onChangeText={(pin) => this.setState({ pin })}
+            onChangeText={this.handleChangePin}
             onSubmitEditing={this.handleEnterPin}
           />
           <Button
@@ -78,6 +90,7 @@ const styles = StyleSheet.create({
   name: {
     color: '#000',
     fontSize: 30,
+    height: 40,
     textAlign: 'center',
   },
   main: {
@@ -96,3 +109,13 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 })
+
+export default compose(
+  firebaseConnect((props, store) => [
+    { path: `players/${store.getState().auth.playerKey}` },
+  ]),
+  connect(({ auth, firebase }) => ({
+    player: path(['data', 'players', auth.playerKey], firebase),
+    playerKey: auth.playerKey,
+  })),
+)(GameScreen)
