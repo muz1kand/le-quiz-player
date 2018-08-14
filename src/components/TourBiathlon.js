@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { path } from 'ramda'
+import BiathlonScores from '../components/BiathlonScores'
 
 class TourBiathlon extends React.Component {
   handleBuzz = async (answer) => {
@@ -23,66 +24,98 @@ class TourBiathlon extends React.Component {
   }
 
   render() {
-    const { round } = this.props
+    const { play, playerKey, round } = this.props
     const answerA = path(['answers', 'a'], round)
     const answerB = path(['answers', 'b'], round)
+    const finalAnswer = path(['finalAnswers', playerKey], play)
+    const finalAnswers = path(['players', playerKey, 'finalAnswers'], play)
     return (
       <View style={styles.container}>
-        <View style={styles.main}>
-          <TouchableOpacity>
+        <View style={styles.scores}>
+          <BiathlonScores scores={finalAnswers}/>
+        </View>
+        <View style={styles.buttons}>
+          <View style={styles.buttonView}>
+            {finalAnswer !== 'b' &&
+            <TouchableOpacity>
+              <View
+                style={styles.button}
+                onTouchStart={() => this.handleBuzz('a')}
+              >
+                <Text style={styles.text}>{answerA}</Text>
+              </View>
+            </TouchableOpacity>}
+            {finalAnswer === 'b' &&
             <View
-              style={styles.button}
-              onTouchStart={this.handleBuzz}
+              style={styles.buttonDisabled}
             >
               <Text style={styles.text}>{answerA}</Text>
-            </View>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.main}>
-          <TouchableOpacity>
+            </View>}
+          </View>
+          <View style={styles.buttonView}>
+            {finalAnswer !== 'a' &&
+            <TouchableOpacity>
+              <View
+                style={styles.buttonRight}
+                onTouchStart={() => this.handleBuzz('b')}
+              >
+                <Text style={styles.text}>{answerB}</Text>
+              </View>
+            </TouchableOpacity>}
+            {finalAnswer === 'a' &&
             <View
-              style={styles.button1}
-              onTouchStart={this.handleBuzz}
+              style={styles.buttonDisabled}
             >
               <Text style={styles.text}>{answerB}</Text>
-            </View>
-          </TouchableOpacity>
+            </View>}
+          </View>
         </View>
       </View>
     )
   }
 }
 
+const button = {
+  alignItems: 'center',
+  backgroundColor: '#EF7C4A',
+  borderRadius: Dimensions.get('window').width,
+  justifyContent: 'center',
+  height: '100%',
+  padding: 10,
+}
+
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     backgroundColor: '#fff',
-    justifyContent: 'space-between',
     marginLeft: 15,
     marginRight: 15,
   },
-  main: {
-    height: Dimensions.get('window').width / 2 - 25,
-    width: Dimensions.get('window').width / 2 - 25,
-  },
-  button: {
+  scores: {
+    marginBottom: 20,
     alignItems: 'center',
-    backgroundColor: '#EF7C4A',
-    borderRadius: Dimensions.get('window').width,
-    justifyContent: 'center',
-    height: '100%',
   },
-  button1: {
-    alignItems: 'center',
+  buttons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  buttonView: {
+    height: Dimensions.get('window').width / 2 - 20,
+    width: Dimensions.get('window').width / 2 - 20,
+  },
+  button,
+  buttonRight: {
+    ...button,
     backgroundColor: '#4999DB',
-    borderRadius: Dimensions.get('window').width,
-    justifyContent: 'center',
-    height: '100%',
+  },
+  buttonDisabled: {
+    ...button,
+    backgroundColor: '#ddd',
   },
   text: {
     color: '#fff',
     fontSize: 20,
-  }
+    textAlign: 'center',
+  },
 })
 
 export default compose(

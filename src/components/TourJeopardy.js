@@ -7,8 +7,14 @@ import { path } from 'ramda'
 
 class TourJeopardy extends React.Component {
   handleBuzz = async () => {
-    const { players, playerKey } = this.props
-    const activePlayKey = path([playerKey, 'activePlayKey'], players)
+    const { play, player, playerKey } = this.props
+    const isPlaying = path(['isPlaying'], play)
+    const currentPlayer = path(['player'], play)
+    const activePlayKey = path(['activePlayKey'], player)
+    const isBlocked = path(['blockedPlayers', playerKey], play)
+    if (isBlocked || currentPlayer || !isPlaying) {
+      return
+    }
     try {
       await this.props.firebase.update(`plays/${activePlayKey}`, {
         isPlaying: false,
@@ -20,17 +26,31 @@ class TourJeopardy extends React.Component {
   }
 
   render() {
+    const { play, playerKey } = this.props
+    const isBlocked = path(['blockedPlayers', playerKey], play)
     return (
       <View style={styles.main}>
+        {!isBlocked &&
         <TouchableOpacity>
           <View
             style={styles.button}
             onTouchStart={this.handleBuzz}
           />
-        </TouchableOpacity>
+        </TouchableOpacity>}
+        {isBlocked &&
+        <View
+          style={styles.buttonDisabled}
+        />}
       </View>
     )
   }
+}
+
+const button = {
+  backgroundColor: '#EF7C4A',
+  borderRadius: (Dimensions.get('window').width - 50) / 2,
+  height: Dimensions.get('window').width - 50,
+  width: Dimensions.get('window').width - 50,
 }
 
 const styles = StyleSheet.create({
@@ -47,11 +67,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  button: {
-    backgroundColor: '#EF7C4A',
-    borderRadius: (Dimensions.get('window').width - 50) / 2,
-    height: Dimensions.get('window').width - 50,
-    width: Dimensions.get('window').width - 50,
+  button,
+  buttonDisabled: {
+    ...button,
+    backgroundColor: '#ddd',
   },
 })
 
