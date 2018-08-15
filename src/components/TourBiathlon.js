@@ -78,7 +78,7 @@ class TourBiathlon extends React.Component {
 const button = {
   alignItems: 'center',
   backgroundColor: '#EF7C4A',
-  borderRadius: Dimensions.get('window').width,
+  borderRadius: (Dimensions.get('window').width / 2 - 20) / 2,
   justifyContent: 'center',
   height: '100%',
   padding: 10,
