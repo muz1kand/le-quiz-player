@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: Dimensions.get('window').width / 25,
     textAlign: 'center',
   },
 })
