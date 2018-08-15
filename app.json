@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "le-quiz-player",
-    "description": "This project is really great.",
+    "name": "Не тупи!",
+    "description": "Клиент для игры в квиз \"Не тупи!\"",
     "slug": "le-quiz-player",
     "privacy": "public",
     "sdkVersion": "29.0.0",
@@ -21,7 +21,11 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "W925F366JU.ru.lequiz.player",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "ru.lequiz.player"
     }
   }
 }
