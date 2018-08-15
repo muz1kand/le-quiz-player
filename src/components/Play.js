@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   name: {
     color: '#000',
     fontSize: 30,
-    height: 40,
+    minHeight: 40,
     textAlign: 'center',
   },
   score: {

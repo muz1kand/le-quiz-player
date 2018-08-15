@@ -43,6 +43,7 @@ class LoginScreen extends React.Component {
           style={styles.input}
           placeholder="Название команды"
           value={this.state.playerName}
+          maxLength={50}
           onChangeText={(playerName) => this.setState({ playerName })}
           onSubmitEditing={this.handleEnter}
         />
