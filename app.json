@@ -21,7 +21,7 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "W925F366JU.ru.lequiz.player",
+      "bundleIdentifier": "ru.lequiz.player",
       "supportsTablet": true
     },
     "android": {
