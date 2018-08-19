@@ -48,7 +48,7 @@ class TourBiathlon extends React.Component {
           </View>
           <View style={styles.buttonView}>
             <Button
-              color="#4999DB"
+              color="#01668D"
               disabled={finalAnswer === 'a'}
               size={Dimensions.get('window').width / 2 - 20}
               onTouchStart={() => this.handleBuzz('b')}

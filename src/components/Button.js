@@ -72,7 +72,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  color: '#EF7C4A',
+  color: '#F77401',
   size: 100,
 }
 
