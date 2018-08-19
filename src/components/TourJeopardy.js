@@ -1,5 +1,7 @@
 import React from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity, View } from 'react-native'
+import PropTypes from 'prop-types'
+import { Dimensions, StyleSheet, View } from 'react-native'
+import Button from '../components/Button'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
@@ -11,8 +13,8 @@ class TourJeopardy extends React.Component {
     const isPlaying = path(['isPlaying'], play)
     const currentPlayer = path(['player'], play)
     const activePlayKey = path(['activePlayKey'], player)
-    const isBlocked = path(['blockedPlayers', playerKey], play)
-    if (isBlocked || currentPlayer || !isPlaying) {
+    const disabled = path(['blockedPlayers', playerKey], play)
+    if (disabled || currentPlayer || !isPlaying) {
       return
     }
     try {
@@ -27,30 +29,17 @@ class TourJeopardy extends React.Component {
 
   render() {
     const { play, playerKey } = this.props
-    const isBlocked = path(['blockedPlayers', playerKey], play)
+    const disabled = path(['blockedPlayers', playerKey], play)
     return (
       <View style={styles.main}>
-        {!isBlocked &&
-        <TouchableOpacity>
-          <View
-            style={styles.button}
-            onTouchStart={this.handleBuzz}
-          />
-        </TouchableOpacity>}
-        {isBlocked &&
-        <View
-          style={styles.buttonDisabled}
-        />}
+        <Button
+          disabled={disabled}
+          size={Dimensions.get('window').width - 50}
+          onTouchStart={this.handleBuzz}
+        />
       </View>
     )
   }
-}
-
-const button = {
-  backgroundColor: '#EF7C4A',
-  borderRadius: (Dimensions.get('window').width - 50) / 2,
-  height: Dimensions.get('window').width - 50,
-  width: Dimensions.get('window').width - 50,
 }
 
 const styles = StyleSheet.create({
@@ -67,12 +56,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  button,
-  buttonDisabled: {
-    ...button,
-    backgroundColor: '#ddd',
-  },
 })
+
+TourJeopardy.propTypes = {
+  firebase: PropTypes.object,
+  play: PropTypes.object,
+  playerKey: PropTypes.string,
+}
 
 export default compose(
   firebaseConnect(({ tourKey }) => [

@@ -1,9 +1,11 @@
 import React from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import PropTypes from 'prop-types'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { path } from 'ramda'
+import Button from '../components/Button'
 import BiathlonScores from '../components/BiathlonScores'
 
 class TourBiathlon extends React.Component {
@@ -36,52 +38,28 @@ class TourBiathlon extends React.Component {
         </View>
         <View style={styles.buttons}>
           <View style={styles.buttonView}>
-            {finalAnswer !== 'b' &&
-            <TouchableOpacity>
-              <View
-                style={styles.button}
-                onTouchStart={() => this.handleBuzz('a')}
-              >
-                <Text style={styles.text}>{answerA}</Text>
-              </View>
-            </TouchableOpacity>}
-            {finalAnswer === 'b' &&
-            <View
-              style={styles.buttonDisabled}
+            <Button
+              disabled={finalAnswer === 'b'}
+              size={Dimensions.get('window').width / 2 - 20}
+              onTouchStart={() => this.handleBuzz('a')}
             >
               <Text style={styles.text}>{answerA}</Text>
-            </View>}
+            </Button>
           </View>
           <View style={styles.buttonView}>
-            {finalAnswer !== 'a' &&
-            <TouchableOpacity>
-              <View
-                style={styles.buttonRight}
-                onTouchStart={() => this.handleBuzz('b')}
-              >
-                <Text style={styles.text}>{answerB}</Text>
-              </View>
-            </TouchableOpacity>}
-            {finalAnswer === 'a' &&
-            <View
-              style={styles.buttonDisabled}
+            <Button
+              color="#4999DB"
+              disabled={finalAnswer === 'a'}
+              size={Dimensions.get('window').width / 2 - 20}
+              onTouchStart={() => this.handleBuzz('b')}
             >
               <Text style={styles.text}>{answerB}</Text>
-            </View>}
+            </Button>
           </View>
         </View>
       </View>
     )
   }
-}
-
-const button = {
-  alignItems: 'center',
-  backgroundColor: '#EF7C4A',
-  borderRadius: (Dimensions.get('window').width / 2 - 20) / 2,
-  justifyContent: 'center',
-  height: '100%',
-  padding: 10,
 }
 
 const styles = StyleSheet.create({
@@ -102,21 +80,20 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').width / 2 - 20,
     width: Dimensions.get('window').width / 2 - 20,
   },
-  button,
-  buttonRight: {
-    ...button,
-    backgroundColor: '#4999DB',
-  },
-  buttonDisabled: {
-    ...button,
-    backgroundColor: '#ddd',
-  },
   text: {
     color: '#fff',
-    fontSize: Dimensions.get('window').width / 25,
+    fontSize: Dimensions.get('window').width / 20,
+    padding: 10,
     textAlign: 'center',
   },
 })
+
+TourBiathlon.propTypes = {
+  firebase: PropTypes.object,
+  play: PropTypes.object,
+  playerKey: PropTypes.string,
+  round: PropTypes.object,
+}
 
 export default compose(
   firebaseConnect(({ play }) => [
