@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { path } from 'ramda'
 import Button from '../components/Button'
 import BiathlonScores from '../components/BiathlonScores'
+import colors from '../constants/colors'
+import layout from '../constants/layout'
 
 class TourBiathlon extends React.Component {
   handleBuzz = async (answer) => {
@@ -40,7 +42,7 @@ class TourBiathlon extends React.Component {
           <View style={styles.buttonView}>
             <Button
               disabled={finalAnswer === 'b'}
-              size={Dimensions.get('window').width / 2 - 20}
+              size={layout.window.width / 2 - 20}
               onTouchStart={() => this.handleBuzz('a')}
             >
               <Text style={styles.text}>{answerA}</Text>
@@ -48,9 +50,9 @@ class TourBiathlon extends React.Component {
           </View>
           <View style={styles.buttonView}>
             <Button
-              color="#01668D"
+              color={colors.secondary}
               disabled={finalAnswer === 'a'}
-              size={Dimensions.get('window').width / 2 - 20}
+              size={layout.window.width / 2 - 20}
               onTouchStart={() => this.handleBuzz('b')}
             >
               <Text style={styles.text}>{answerB}</Text>
@@ -77,12 +79,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   buttonView: {
-    height: Dimensions.get('window').width / 2 - 20,
-    width: Dimensions.get('window').width / 2 - 20,
+    height: layout.window.width / 2,
+    width: layout.window.width / 2 - 20,
   },
   text: {
     color: '#fff',
-    fontSize: Dimensions.get('window').width / 20,
+    fontSize: layout.window.width / 20,
     padding: 10,
     textAlign: 'center',
   },

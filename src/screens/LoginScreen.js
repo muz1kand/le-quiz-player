@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { AsyncStorage, Button, StyleSheet, TextInput, View } from 'react-native'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
@@ -41,6 +42,7 @@ class LoginScreen extends React.Component {
       <View style={styles.container}>
         <TextInput
           style={styles.input}
+          underlineColorAndroid="transparent"
           placeholder="Название команды"
           value={this.state.playerName}
           maxLength={50}
@@ -82,6 +84,12 @@ const mapDispatchToProps = dispatch =>
       )
     },
   })
+
+LoginScreen.propTypes = {
+  firebase: PropTypes.object,
+  navigation: PropTypes.object,
+  login: PropTypes.func,
+}
 
 export default compose(
   firebaseConnect(),

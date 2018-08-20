@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, View } from 'react-native'
+import colors from '../constants/colors'
 
 class Button extends React.Component {
   constructor() {
@@ -72,7 +73,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  color: '#F77401',
+  color: colors.primary,
   size: 100,
 }
 

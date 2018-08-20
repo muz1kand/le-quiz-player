@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import Button from '../components/Button'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
 import { path } from 'ramda'
+import layout from '../constants/layout'
 
 class TourJeopardy extends React.Component {
   handleBuzz = async () => {
@@ -34,7 +35,7 @@ class TourJeopardy extends React.Component {
       <View style={styles.main}>
         <Button
           disabled={disabled}
-          size={Dimensions.get('window').width - 50}
+          size={layout.window.width - 50}
           onTouchStart={this.handleBuzz}
         />
       </View>

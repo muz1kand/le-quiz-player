@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { firebaseConnect } from 'react-redux-firebase'
@@ -66,6 +67,7 @@ class GameScreen extends React.Component {
           <Text>Неправильный PIN</Text>}
           <TextInput
             autoCapitalize="none"
+            underlineColorAndroid="transparent"
             style={styles.input}
             placeholder="PIN игры"
             value={this.state.pin}
@@ -111,6 +113,13 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 })
+
+GameScreen.propTypes = {
+  firebase: PropTypes.object,
+  navigation: PropTypes.object,
+  player: PropTypes.object,
+  playerKey: PropTypes.string,
+}
 
 export default compose(
   firebaseConnect((props, store) => [
