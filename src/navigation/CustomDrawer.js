@@ -42,7 +42,7 @@ class CustomDrawer extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
+    paddingTop: 30,
   },
   logo: {
     alignItems: 'center',
