@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ActivityIndicator } from 'react-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -7,6 +8,7 @@ import { path } from 'ramda'
 import tours from '../constants/tours'
 import TourJeopardy from './TourJeopardy'
 import TourBiathlon from './TourBiathlon'
+import TourNumbers from './TourNumbers'
 
 class Tour extends React.Component {
   render() {
@@ -14,16 +16,20 @@ class Tour extends React.Component {
     const type = path(['type'], tour)
 
     switch (type) {
-      case tours.numbers:
-        return <TourJeopardy {...this.props}/>
-      case tours.biathlon:
-        return <TourBiathlon {...this.props}/>
-      case tours.jeopardy:
-        return <TourJeopardy {...this.props}/>
-      default:
-        return <ActivityIndicator/>
+    case tours.numbers:
+      return <TourNumbers {...this.props}/>
+    case tours.biathlon:
+      return <TourBiathlon {...this.props}/>
+    case tours.jeopardy:
+      return <TourJeopardy {...this.props}/>
+    default:
+      return <ActivityIndicator/>
     }
   }
+}
+
+Tour.propTypes = {
+  tour: PropTypes.object,
 }
 
 export default compose(
