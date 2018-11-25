@@ -1,5 +1,6 @@
 export default {
-  jeopardy: 'jeopardy',
   biathlon: 'biathlon',
+  jeopardy: 'jeopardy',
   numbers: 'numbers',
+  stakes: 'stakes',
 }

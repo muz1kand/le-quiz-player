@@ -9,6 +9,7 @@ import tours from '../constants/tours'
 import TourJeopardy from './TourJeopardy'
 import TourBiathlon from './TourBiathlon'
 import TourNumbers from './TourNumbers'
+import TourStakes from './TourStakes'
 
 class Tour extends React.Component {
   render() {
@@ -16,12 +17,14 @@ class Tour extends React.Component {
     const type = path(['type'], tour)
 
     switch (type) {
-    case tours.numbers:
-      return <TourNumbers {...this.props}/>
     case tours.biathlon:
       return <TourBiathlon {...this.props}/>
     case tours.jeopardy:
       return <TourJeopardy {...this.props}/>
+    case tours.numbers:
+      return <TourNumbers {...this.props}/>
+    case tours.stakes:
+      return <TourStakes {...this.props}/>
     default:
       return <ActivityIndicator/>
     }

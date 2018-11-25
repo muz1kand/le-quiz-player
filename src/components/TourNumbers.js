@@ -57,8 +57,9 @@ class TourJeopardy extends React.Component {
           onChangeText={this.handleValueChange}
           onSubmitEditing={this.handleSubmit}
         />}
-        {!answer && <Button
-          size={layout.window.width - 50}
+        {!answer &&
+        <Button
+          size={layout.window.width / 2}
           onTouchStart={this.handleSubmit}
         >
           <Text style={styles.text}>Ответить</Text>
