@@ -25,13 +25,13 @@
     ],
     "ios": {
       "bundleIdentifier": "ru.lequiz.player",
-      "buildNumber": "2",
+      "buildNumber": "4",
       "supportsTablet": true
     },
     "android": {
       "package": "ru.lequiz.player",
       "permissions": [],
-      "versionCode": 3
+      "versionCode": 4
     }
   }
 }
